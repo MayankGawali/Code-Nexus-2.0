@@ -1,51 +1,78 @@
-# Code-Nexus-2.0
-Hackathon winning repo
+# Prometheus · Code-Nexus-2.0
 
-# Prometheus review desk
+A local reviewer workbench for the **fictional Aster Watch** campaign. Approved facts, immutable revisions, dated audits, evidence links and human decisions are stored in SQLite. No account, API key or AI provider is required. Installation downloads packages; the running demo uses only localhost.
 
-A single-reviewer workspace for the fictional Aster Watch launch. Product facts, revisions, audit findings and approvals live in local SQLite. The demo uses no accounts, API keys, hosted fonts or external services.
+## Start a fresh rehearsal (PowerShell)
 
-## Start locally
+Use **Node 24.14–24.x** and npm. Stop previous Prometheus servers with Ctrl+C before installing; Windows locks Next's native module while a server is running.
 
-Use Node 24.14 or newer in the 24.x line and npm. From the repository root:
-
-```sh
+```powershell
 npm ci
+$env:PROMETHEUS_DB = "data/demo-release.sqlite"
 npm run db:migrate
 npm run db:seed
 npm run dev
 ```
 
-Open http://127.0.0.1:3000. Migration and seeding are repeatable; seeding never resets an edited campaign. The default database is `data/prometheus.sqlite`. Set `PROMETHEUS_DB` to a different file before migrating to create an independent workspace. Stop the server before copying a database and its WAL files. Package and browser installation require internet access; the seeded app runs locally afterwards.
+Open **http://127.0.0.1:3000/campaigns/aster**. The seed has three approved assets. Seed is idempotent: it does **not** undo previous edits. In an empty workspace, the landing page also offers **Load Aster Watch demo**.
 
-## Try a fact change
+For production, stop dev with Ctrl+C and keep the same database environment variable:
 
-1. Open **Aster Watch**. Its three assets are approved for publication on **2026-11-20**.
-2. Under **Fact registry → Battery life**, publish “up to 18 hours in standard mode” effective **2026-11-20**. The product page and email now need review. The poster only cites the case colours, so its approval is still current.
-3. Open the product page. Its ledger shows the historical approval, the exact quote, its character offsets and its cited version. Run an audit for **2026-11-19**, then for **2026-11-20**, to see the validity boundary.
-4. Choose **Correct claim**, replace the old wording with the new wording, save, audit for **2026-11-20**, then approve the revision. The prior decision stays in the ledger.
-
-The campaign list of assets shows readiness for the campaign's planned publication date. An approval for another date appears in history but cannot clear that date's review requirement.
-
-## Verify
-
-```sh
-npm run typecheck
-npm test
+```powershell
 npm run build
-npx playwright install chromium
-npm run test:e2e
 npm start
 ```
 
-Playwright runs the production build on port 3198 against a separate temporary database. `npm start` serves the production app on port 3000.
+If port 3000 is occupied, append `-- --port 4000` to dev/start and use that port. On macOS/Linux use `export PROMETHEUS_DB=data/demo-release.sqlite` instead of the PowerShell assignment.
 
-## How it works
+## Reset safely: create another isolated demo
 
-- `migrations/` and `lib/db.ts`: numbered transactional migrations and a SQLite query layer that validates typed rows with Zod.
-- `lib/models.ts`, `lib/review.ts`: date-only validity, variant-scoped audits, evidence and approval rules. A transition closes the previous open interval by appending a boundary and inserts the successor in the same transaction. Version content and review history cannot be updated or deleted.
-- `lib/seed.ts`: one fictional campaign, three assets, two Aster Standard facts and an independent Aster Trail GPS fact.
-- `app/`: server-rendered campaign list, registry, revision editor and evidence ledger. Form actions validate input through the domain layer.
-- `tests/` and `e2e/`: domain/database tests and a browser test covering the full review loop.
+```powershell
+npm run demo:fresh -- judge-two
+$env:PROMETHEUS_DB = "data/demo-judge-two.sqlite"
+npm start
+```
 
-The audit engine deliberately uses a conservative rule: each sentence or line must exactly match one approved phrase for that variant and date, ignoring case and surrounding whitespace. Unsupported prose needs a human edit. Spans use zero-based, end-exclusive JavaScript string offsets. The poster is reviewed as text; there is no OCR, semantic paraphrase matching, authentication or multi-user workflow.
+Stop the old server first. This command only creates a new `data/demo-<name>.sqlite` containing fictional seed data and a demo marker. It refuses existing files and path traversal. It never deletes records, overwrites a database, or resets the default workspace. Choose a new name for each rehearsal. The original database and history remain intact.
+
+## Judge journey
+
+Use the tabs: **Overview → Fact registry → Asset review → Revision history**.
+
+Change Battery life with a source quote, effective date and reason. **Preview impact** before publishing. Only dependent battery assets need another review; the colour-only poster stays approved. Select a finding to highlight its exact occurrence. A correct number with the wrong GPS condition remains unresolved. Save the complete correction, run an audit and explicitly approve; edits never inherit approvals. Reopen history to inspect old evidence and decisions.
+
+For the February boundary rehearsal, first select **2027-02-01** and re-audit/approve each asset. Then publish a replacement effective **2027-02-01**. Earlier dated approvals remain in history. See the [three-minute demo script](docs/DEMO.md).
+
+## Release checks
+
+```powershell
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run test:integration
+npm test
+npm run eval -- --output evaluation/release-results.json
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+Playwright uses separate temporary SQLite files, production servers on ports 3198/3199/3200, and a dev-startup check on port 3000 (stop your manual server first). It exercises desktop/mobile review and poster contrast, plus the seeded judge journey and a stale approval attempt. Screenshots/traces are in `test-results`. Unit/integration tests and browser tests do not reset your workspace.
+
+The [synthetic evaluation](evaluation/README.md) reports correct verdicts, clean-claim false alarms, missed issues and invalid citations. It is a small development evaluation, not a claim about real-world accuracy.
+
+## Honest limits and recovery
+
+- `local-watch-v2` supports a bounded watch grammar with positive, safely representable whole-number hours, not arbitrary marketing copy. Unknown paraphrases, uncertain extraction and incomplete checks require manual review.
+- Facts apply to date-only, half-open intervals [from, to). Retrieval stays within the asset variant. Source quotes and reasons are reviewer-supplied provenance; their truth is not independently authenticated.
+- Approvals are bound to an audit, revision, publication date and evidence context. Overrides require reasons and do not transfer to later revisions. Explicit overrides are human exceptions, not verifier-supported claims.
+- The poster check measures only the known **16px CTA foreground and solid background**. It is not OCR, palette validation, image analysis or a complete accessibility audit. Unsupported backgrounds require manual review.
+- Local demo identity only; no authentication, role enforcement or production multi-user guarantees. Re-audits are synchronous; comparisons use claim position; previews expire conservatively.
+- Legacy records with missing original actors/timestamps are labelled as such. Previous decisions remain historical records even when evidence is stale.
+- **No optional AI provider is integrated or needed.** A provider outage cannot affect this release's local mode. Never describe its results as model-generated. If a claim cannot be interpreted, keep the manual-review result or edit to approved wording and re-audit.
+- On a stale-edit/preview error, reload the current record and regenerate the preview; do not bypass the check. If a rehearsal goes off track, use the explicit new-demo command above.
+
+Detailed implementation notes: [architecture and earlier workflow notes](docs/ARCHITECTURE.md).
+
+
+Release evidence: [measured checks and non-blocking issues](docs/RELEASE.md). The production dependency audit reported zero advisories; the full tree reported 10 moderate development-tool advisories through minimatch. These remain disclosed rather than applying an unreviewed force/downgrade fix.

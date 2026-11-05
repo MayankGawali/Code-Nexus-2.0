@@ -1,24 +1,37 @@
 import Link from "next/link";
 import "./style.css";
 export const metadata = {
-  title: "Prometheus | Review desk",
-  description: "A local campaign evidence and review workspace.",
+  title: "Prometheus — Review workbench",
+  description: "Evidence-led campaign review in your local workspace.",
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <header>
+        <a href="#main" className="skip">
+          Skip to workbench
+        </a>
+        <header className="app-header">
           <Link href="/" className="brand">
-            <b className="mark">P</b> Prometheus
+            <span className="brand-symbol" aria-hidden="true">
+              P
+            </span>
+            prometheus<span className="brand-divider">/</span>
+            <span className="brand-sub">Review workbench</span>
           </Link>
-          <span className="desk"> / &nbsp; Review desk</span>
-          <span className="local">● &nbsp; Local workspace</span>
+          <span className="identity">
+            <span className="avatar">DR</span>
+            <span>
+              Local demo reviewer<small>No account required</small>
+            </span>
+          </span>
         </header>
-        <main>{children}</main>
+        <main id="main">{children}</main>
         <footer>
-          PROMETHEUS &nbsp; / &nbsp; REVIEW SYSTEM{" "}
-          <span>LOCAL EDITION · 01</span>
+          <span>
+            Prometheus <b>·</b> Local review workspace
+          </span>
+          <span>Evidence first. Human approval.</span>
         </footer>
       </body>
     </html>

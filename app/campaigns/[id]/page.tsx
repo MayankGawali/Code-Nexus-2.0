@@ -1,129 +1,132 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { database } from "../../../lib/db";
-import {
-  assets,
-  campaigns,
-  facts,
-  versions,
-  status,
-} from "../../../lib/review";
-import { act } from "../../actions";
-import { Badge, Hidden } from "../../fields";
+import * as r from "../../../lib/review";
+import { selectedDate } from "../../../lib/context";
+import { CampaignNav, PageTitle } from "../../components";
+import { Badge } from "../../fields";
 export const dynamic = "force-dynamic";
 export default async function Campaign({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ error?: string }>;
 }) {
   const { id } = await params,
     db = database(),
-    c = campaigns(db).find((c) => c.id === id);
+    c = r.campaigns(db).find((c) => c.id === id);
   if (!c) notFound();
-  const list = assets(db, id),
-    path = "/campaigns/" + id,
-    submit = act.bind(null, path),
-    error = (await searchParams).error;
+  const assets = r.assets(db, id),
+    attention = assets.find((a) => r.status(db, a.id) !== "Approved"),
+    approved = assets.filter((a) => r.status(db, a.id) === "Approved").length,
+    base = "/campaigns/" + id;
   return (
     <>
-      <Link className="back" href="/">
+      <Link className="breadcrumb" href="/">
         ← Campaign desk
       </Link>
-      <p className="kicker">CAMPAIGN DOSSIER &nbsp; / &nbsp; 001</p>
-      <h1>{c.name}</h1>
-      <p className="lead">
-        Launch review <i>/</i> Planned publication {c.publication}
-      </p>
-      {error && <p role="alert">{error}</p>}
-      <div className="section">
+      <PageTitle
+        eyebrow="CAMPAIGN OVERVIEW"
+        title={c.name}
+        description="One launch. Every claim accounted for."
+      >
+        <div className="publication-stamp">
+          <span className="mini-label">PLANNED PUBLICATION</span>
+          <strong>{c.publication}</strong>
+          <span>
+            {approved} / {assets.length} assets approved
+          </span>
+        </div>
+      </PageTitle>
+      <CampaignNav id={id} active="Overview" />
+      <section className={"next-step " + (attention ? "attention" : "")}>
+        <div>
+          <p className="eyebrow">
+            {attention ? "NEXT IN YOUR QUEUE" : "READY FOR YOUR NEXT CHANGE"}
+          </p>
+          <h2>
+            {attention
+              ? attention.name + " needs your attention"
+              : "All current assets are approved"}
+          </h2>
+          <p>
+            {attention
+              ? "Open the draft to resolve findings and approve its revision."
+              : "Update an approved fact to preview which campaign assets need another review."}
+          </p>
+        </div>
+        <Link
+          className="button"
+          href={attention ? base + "/" + attention.id : base + "/facts"}
+        >
+          {attention ? "Review next asset →" : "Manage approved facts →"}
+        </Link>
+      </section>
+      <div className="section-heading">
         <h2>Campaign assets</h2>
-        <small>{list.length} ITEMS</small>
+        <span>
+          {assets.length} assets · Status applies to each selected publication
+          date
+        </span>
       </div>
-      <div className="card">
-        {list.map((a, i) => (
-          <Link className="row" href={path + "/" + a.id} key={a.id}>
-            <small>0{i + 1}</small>
-            <div>
-              <strong>{a.name}</strong>
-              <p>
-                {a.channel} · {a.variant}
-              </p>
-            </div>
-            <Badge value={status(db, a.id)} />
-            <b>→</b>
-          </Link>
-        ))}
-      </div>
-      <div className="section">
-        <h2>Fact registry</h2>
-        <small>PRODUCT LIBRARY</small>
-      </div>
-      <p>
-        Approved wording and effective dates by product variant. Open a record
-        to manage its versions.
-      </p>
-      {facts(db).map((f) => {
-        const history = versions(db, f.id),
-          latest = history[0];
-        return (
-          <details className="card" key={f.id}>
-            <summary>
-              <span>
-                <small>{f.variant}</small>
-                <strong>{f.label}</strong>
+      {!assets.length && (
+        <div className="card empty">
+          No assets have been added to this campaign.
+        </div>
+      )}
+      <div className="asset-list">
+        {assets.map((a) => {
+          const rev = r.revisions(db, a.id)[0],
+            day = selectedDate(db, a.id),
+            audits = rev ? r.audits(db, rev.id) : [];
+          return (
+            <Link
+              className="asset-row card"
+              href={base + "/" + a.id}
+              key={a.id}
+            >
+              <span
+                className={
+                  "asset-icon " + (a.channel === "Print" ? "poster-icon" : "")
+                }
+                aria-hidden="true"
+              >
+                {a.channel === "Print"
+                  ? "▧"
+                  : a.channel === "Email"
+                    ? "✉"
+                    : "▤"}
               </span>
-              <span className="preview">{latest.wording}</span>
-            </summary>
-            {history.map((v) => (
-              <p key={v.id}>
-                <code>V{v.id}</code> “{v.wording}” · {v.start} to{" "}
-                {v.until || "open"} (exclusive)
-              </p>
-            ))}
-            <form action={submit}>
-              <Hidden
-                values={{ action: "version", id: f.id, expected: latest.id }}
-              />
-              <label>
-                New approved wording
-                <input name="word" required maxLength={240} />
-              </label>
-              <label>
-                Effective from
-                <input type="date" name="start" required />
-              </label>
-              <button>Publish version</button>
-            </form>
-          </details>
-        );
-      })}
-      <details className="card">
-        <summary>
-          <strong>+ Add approved fact</strong>
-        </summary>
-        <form action={submit}>
-          <Hidden values={{ action: "fact" }} />
-          <label>
-            Product variant
-            <input name="variant" required defaultValue={list[0]?.variant} />
-          </label>
-          <label>
-            Fact label
-            <input name="label" required />
-          </label>
-          <label>
-            Approved wording
-            <input name="word" required />
-          </label>
-          <label>
-            Effective from
-            <input type="date" name="start" required />
-          </label>
-          <button>Add fact</button>
-        </form>
-      </details>
+              <div className="asset-row-main">
+                <span className="mini-label">
+                  {a.channel} · {a.variant}
+                </span>
+                <h3>{a.name}</h3>
+                <p>{rev?.body ?? "No revision yet"}</p>
+              </div>
+              <div className="asset-row-meta">
+                <Badge value={r.status(db, a.id)} />
+                <small>Publication {day}</small>
+                <small>
+                  R{rev?.id ?? "—"} · {audits.length} recorded{" "}
+                  {audits.length === 1 ? "audit" : "audits"}
+                </small>
+              </div>
+              <span className="row-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+      <section className="help-strip">
+        <strong>How review works</strong>
+        <p>
+          Change a source → preview affected assets → correct the draft → run an
+          audit → approve the new revision. Historical approvals stay in the
+          evidence ledger.
+        </p>
+        <Link href={base + "/history"}>Explore revision history →</Link>
+      </section>
     </>
   );
 }

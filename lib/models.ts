@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { claim, verdict } from "./verification";
 export const date = z.iso.date();
 const s = z.string(),
   n = z.number().int();
@@ -19,7 +20,12 @@ export const version = z.object({
   start: date,
   until: date.nullable(),
 });
-export const audit = z.object({ id: n, revision: n, publication: date });
+export const audit = z.object({
+  id: n,
+  revision: n,
+  publication: date,
+  mode: s,
+});
 export const finding = z.object({
   id: n,
   audit: n,
@@ -27,6 +33,13 @@ export const finding = z.object({
   stop: n,
   quote: s,
   supported: n,
+  verdict: verdict.nullable(),
+  explanation: s.nullable(),
+  suggestion: s.nullable(),
+  extracted: z.preprocess(
+    (v) => (typeof v === "string" ? JSON.parse(v) : v),
+    claim.nullable(),
+  ),
 });
 export const evidence = z.object({ finding: n, version: n });
 export const decision = z.object({

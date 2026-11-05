@@ -1,0 +1,3 @@
+CREATE TABLE fact_creation_preview(id TEXT PRIMARY KEY, variant TEXT NOT NULL, label TEXT NOT NULL, wording TEXT NOT NULL, start TEXT NOT NULL, quote TEXT NOT NULL, reason TEXT NOT NULL, snapshot TEXT NOT NULL, impact TEXT NOT NULL CHECK(json_valid(impact)), created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP) STRICT;
+CREATE TRIGGER immutable_fact_creation_preview_UPDATE BEFORE UPDATE ON fact_creation_preview BEGIN SELECT raise(ABORT,'Immutable history'); END;
+CREATE TRIGGER immutable_fact_creation_preview_DELETE BEFORE DELETE ON fact_creation_preview BEGIN SELECT raise(ABORT,'Immutable history'); END;

@@ -1,0 +1,10 @@
+DROP TRIGGER log_source;
+DROP TRIGGER log_revision;
+DROP TRIGGER log_override;
+DROP TRIGGER log_approval;
+DROP TRIGGER log_selection;
+CREATE TRIGGER log_source AFTER INSERT ON source_change BEGIN INSERT INTO history(kind,entity,detail,actor) VALUES('source',new.version,'Source V'||new.version||': '||new.quote||' — '||new.reason,review_actor()); END;
+CREATE TRIGGER log_revision AFTER INSERT ON revision BEGIN INSERT INTO history(kind,entity,detail,actor) VALUES('revision',new.id,'Revision R'||new.id||' for '||new.asset||': '||new.body,review_actor()); END;
+CREATE TRIGGER log_override AFTER INSERT ON finding_override BEGIN INSERT INTO history(kind,entity,detail,actor) VALUES('override',new.id,'Override #'||new.id||' for finding #'||new.finding||', R'||new.revision||': '||new.reason,review_actor()); END;
+CREATE TRIGGER log_approval AFTER INSERT ON decision BEGIN INSERT INTO history(kind,entity,detail,actor) VALUES('approval',new.id,'Approval #'||new.id||' for audit #'||new.audit,review_actor()); END;
+CREATE TRIGGER log_selection AFTER INSERT ON publication_selection BEGIN INSERT INTO history(kind,entity,detail,actor) VALUES('publication',new.id,new.asset||': selected publication '||new.day,review_actor()); END;

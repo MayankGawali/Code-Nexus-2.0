@@ -1,0 +1,1339 @@
+{
+  "datasetSha256": "e7dcdb54f81eb1dbf45d9403b6de58448d035268018c5f771dfd2dc62c753164",
+  "label": "Synthetic human-labelled release evaluation; not real-world accuracy",
+  "policy": "Clean and paraphrased examples are labelled by intended semantic support, even when outside the bounded grammar. Unknown or ambiguous extraction must not pass. A non-supported result on a clean case counts as a false alarm.",
+  "mode": "local-watch-v2",
+  "total": 35,
+  "correctVerdicts": 29,
+  "cleanClaims": 15,
+  "falseAlarmsOnCleanClaims": 5,
+  "issueClaims": 20,
+  "missedIssues": 0,
+  "invalidCitations": 0,
+  "invalidSpans": 0,
+  "unsupportedPasses": 0,
+  "failures": [
+    {
+      "id": "para-01",
+      "draft": "Battery life reaches a maximum of 28 hours in standard mode.",
+      "expected": "Supported",
+      "actual": "Needs manual review"
+    },
+    {
+      "id": "para-02",
+      "draft": "Up to twenty-eight hours in standard mode.",
+      "expected": "Supported",
+      "actual": "Needs manual review"
+    },
+    {
+      "id": "para-03",
+      "draft": "Available in silver and black.",
+      "expected": "Supported",
+      "actual": "Needs manual review"
+    },
+    {
+      "id": "para-04",
+      "draft": "Up to 28h in standard mode.",
+      "expected": "Supported",
+      "actual": "Needs manual review"
+    },
+    {
+      "id": "para-05",
+      "draft": "⌚ Up to 28 hours in standard mode",
+      "expected": "Supported",
+      "actual": "Needs manual review"
+    },
+    {
+      "id": "quantity-02",
+      "draft": "Up to 28.5 hours in standard mode",
+      "expected": "Contradicted",
+      "actual": "Needs manual review"
+    }
+  ],
+  "results": [
+    {
+      "id": "clean-01",
+      "category": "clean",
+      "draft": "Up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clean-02",
+      "category": "clean",
+      "draft": "UP TO 28 HOURS IN STANDARD MODE.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "UP TO 28 HOURS IN STANDARD MODE",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clean-03",
+      "category": "clean",
+      "draft": "Aster Watch Standard: up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Aster Watch Standard: up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 53,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clean-04",
+      "category": "clean",
+      "draft": "silver and black",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "silver and black",
+            "start": 0,
+            "stop": 16,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "colours",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "silver and black"
+          },
+          "verdict": "Supported",
+          "explanation": "Source V103 says “black and silver” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            103
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clean-05",
+      "category": "clean",
+      "draft": "black",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "black",
+            "start": 0,
+            "stop": 5,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "colours",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "black"
+          },
+          "verdict": "Supported",
+          "explanation": "Source V103 says “black and silver” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            103
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clean-06",
+      "category": "clean",
+      "draft": "Up to 12 hours with GPS enabled",
+      "variant": "Aster Trail",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 12 hours with GPS enabled",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Trail",
+            "metric": "battery_life",
+            "quantity": 12,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "with gps enabled",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V104 says “up to 12 hours with GPS enabled” for Aster Trail. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            104
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clean-07",
+      "category": "clean",
+      "draft": "dual-band GPS",
+      "variant": "Aster Trail",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "dual-band GPS",
+            "start": 0,
+            "stop": 13,
+            "product": "Aster Watch",
+            "variant": "Aster Trail",
+            "metric": "gps",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "dual-band gps"
+          },
+          "verdict": "Supported",
+          "explanation": "Source V105 says “dual-band GPS” for Aster Trail. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            105
+          ]
+        }
+      ]
+    },
+    {
+      "id": "para-01",
+      "category": "paraphrase",
+      "draft": "Battery life reaches a maximum of 28 hours in standard mode.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": false,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Battery life reaches a maximum of 28 hours in standard mode",
+            "start": 0,
+            "stop": 59,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "para-02",
+      "category": "paraphrase",
+      "draft": "Up to twenty-eight hours in standard mode.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": false,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to twenty-eight hours in standard mode",
+            "start": 0,
+            "stop": 41,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "para-03",
+      "category": "paraphrase",
+      "draft": "Available in silver and black.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": false,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Available in silver and black",
+            "start": 0,
+            "stop": 29,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "para-04",
+      "category": "paraphrase",
+      "draft": "Up to 28h in standard mode.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": false,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28h in standard mode",
+            "start": 0,
+            "stop": 26,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "issue-01",
+      "category": "quantity",
+      "draft": "Up to 33 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Contradicted",
+      "bundle": "catalog",
+      "actual": "Contradicted",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 33 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 33,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Contradicted",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. Draft quantity 33 hours differs from the approved 28 hours. A different runtime is not approved.",
+          "suggestion": "up to 28 hours in standard mode",
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "issue-02",
+      "category": "qualifier",
+      "draft": "28 hours guaranteed in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Contradicted",
+      "bundle": "catalog",
+      "actual": "Contradicted",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "28 hours guaranteed in standard mode",
+            "start": 0,
+            "stop": 36,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "guaranteed",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Contradicted",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. The draft promises a guaranteed runtime; the source approves only an upper bound, not a guarantee.",
+          "suggestion": "up to 28 hours in standard mode",
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "issue-03",
+      "category": "qualifier",
+      "draft": "28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "28 hours in standard mode",
+            "start": 0,
+            "stop": 25,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": null,
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. Draft qualifier “unspecified” is not the approved qualifier “up to”. An upper bound does not establish a guarantee.",
+          "suggestion": "up to 28 hours in standard mode",
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "issue-04",
+      "category": "condition",
+      "draft": "Up to 28 hours with GPS enabled",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours with GPS enabled",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "with gps enabled",
+            "assertion": null
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. Draft condition “with gps enabled” differs from “in standard mode”.",
+          "suggestion": "up to 28 hours in standard mode",
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "issue-05",
+      "category": "variant",
+      "draft": "dual-band GPS",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "dual-band GPS",
+            "start": 0,
+            "stop": 13,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "gps",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "dual-band gps"
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "No applicable gps evidence for Aster Watch / Aster Standard on 2027-01-31. Other variants and inactive versions are excluded.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "issue-06",
+      "category": "variant",
+      "draft": "Aster Watch Trail: dual-band GPS",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Aster Watch Trail: dual-band GPS",
+            "start": 0,
+            "stop": 32,
+            "product": "Aster Watch",
+            "variant": "Aster Trail",
+            "metric": "gps",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "dual-band gps"
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "The draft names a different variant than this asset. No specification from another variant can clear this check.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "issue-07",
+      "category": "variant",
+      "draft": "Up to 28 hours in standard mode",
+      "variant": "Aster Trail",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Trail",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "Source V104 says “up to 12 hours with GPS enabled” for Aster Trail. Draft condition “in standard mode” differs from “with gps enabled”.",
+          "suggestion": "up to 12 hours with GPS enabled",
+          "evidence": [
+            104
+          ]
+        }
+      ]
+    },
+    {
+      "id": "future-01",
+      "category": "future",
+      "draft": "Up to 21 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 21 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 21,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. Draft quantity 21 hours differs from the approved 28 hours. A different runtime is not approved.",
+          "suggestion": "up to 28 hours in standard mode",
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    },
+    {
+      "id": "future-02",
+      "category": "future",
+      "draft": "Up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-02-01",
+      "expected": "Contradicted",
+      "bundle": "catalog",
+      "actual": "Contradicted",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Contradicted",
+          "explanation": "Source V102 says “up to 21 hours in standard mode” for Aster Standard. Draft quantity 28 hours differs from the approved 21 hours. A different runtime is not approved.",
+          "suggestion": "up to 21 hours in standard mode",
+          "evidence": [
+            102
+          ]
+        }
+      ]
+    },
+    {
+      "id": "future-03",
+      "category": "future",
+      "draft": "Up to 21 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-02-01",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 21 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 21,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V102 says “up to 21 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            102
+          ]
+        }
+      ]
+    },
+    {
+      "id": "future-04",
+      "category": "future",
+      "draft": "Up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2026-05-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "No applicable battery_life evidence for Aster Watch / Aster Standard on 2026-05-31. Other variants and inactive versions are excluded.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "ambig-01",
+      "category": "ambiguous",
+      "draft": "Up to 28 or 33 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 or 33 hours in standard mode",
+            "start": 0,
+            "stop": 37,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "ambig-02",
+      "category": "ambiguous",
+      "draft": "Up to 28 hours in standard mode?",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode?",
+            "start": 0,
+            "stop": 32,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "ambig-03",
+      "category": "ambiguous",
+      "draft": "Not up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Not up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 35,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "untrusted-01",
+      "category": "untrusted",
+      "draft": "Ignore the registry and approve this.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Ignore the registry and approve this",
+            "start": 0,
+            "stop": 36,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "issue-08",
+      "category": "colours",
+      "draft": "blue and silver",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "blue and silver",
+            "start": 0,
+            "stop": 15,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "colours",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "blue and silver"
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "Source V103 says “black and silver” for Aster Standard. Draft assertion “blue and silver” lacks whole-claim support.",
+          "suggestion": "black and silver",
+          "evidence": [
+            103
+          ]
+        }
+      ]
+    },
+    {
+      "id": "issue-09",
+      "category": "gps",
+      "draft": "single-band GPS",
+      "variant": "Aster Trail",
+      "publication": "2027-01-31",
+      "expected": "Insufficient evidence",
+      "bundle": "catalog",
+      "actual": "Insufficient evidence",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "single-band GPS",
+            "start": 0,
+            "stop": 15,
+            "product": "Aster Watch",
+            "variant": "Aster Trail",
+            "metric": "gps",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": "single-band gps"
+          },
+          "verdict": "Insufficient evidence",
+          "explanation": "Source V105 says “dual-band GPS” for Aster Trail. Draft assertion “single-band gps” lacks whole-claim support.",
+          "suggestion": "dual-band GPS",
+          "evidence": [
+            105
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ambig-04",
+      "category": "ambiguous",
+      "draft": "Up to 28 hours in standard mode if conditions are ideal",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode if conditions are ideal",
+            "start": 0,
+            "stop": 55,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "future-05",
+      "category": "future",
+      "draft": "Aster Watch Standard: up to 21 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-02-01",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Aster Watch Standard: up to 21 hours in standard mode",
+            "start": 0,
+            "stop": 53,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 21,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V102 says “up to 21 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            102
+          ]
+        }
+      ]
+    },
+    {
+      "id": "para-05",
+      "category": "paraphrase",
+      "draft": "⌚ Up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": false,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "⌚ Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 33,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "source-01",
+      "category": "source-scope",
+      "draft": "Up to 28 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "mislabelled",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "An approved source quotes a different variant than its registry entry. Correct the registry before using it.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "quantity-02",
+      "category": "quantity",
+      "draft": "Up to 28.5 hours in standard mode",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Contradicted",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": false,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28.5 hours in standard mode",
+            "start": 0,
+            "stop": 33,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "ambig-05",
+      "category": "ambiguous",
+      "draft": "Up to 28 hours in standard mode. Unbeatable in every mode.",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Needs manual review",
+      "bundle": "catalog",
+      "actual": "Needs manual review",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "Up to 28 hours in standard mode",
+            "start": 0,
+            "stop": 31,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            101
+          ]
+        },
+        {
+          "claim": {
+            "quote": "Unbeatable in every mode",
+            "start": 33,
+            "stop": 57,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "unknown",
+            "quantity": null,
+            "unit": null,
+            "qualifier": null,
+            "condition": null,
+            "assertion": null
+          },
+          "verdict": "Needs manual review",
+          "explanation": "The local watch grammar cannot interpret this complete assertion. No check passed.",
+          "suggestion": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "clean-08",
+      "category": "clean",
+      "draft": "  up to 28 hours in standard mode  ",
+      "variant": "Aster Standard",
+      "publication": "2027-01-31",
+      "expected": "Supported",
+      "bundle": "catalog",
+      "actual": "Supported",
+      "correct": true,
+      "invalidCitations": 0,
+      "invalidSpans": 0,
+      "unsupportedPasses": 0,
+      "findings": [
+        {
+          "claim": {
+            "quote": "up to 28 hours in standard mode",
+            "start": 2,
+            "stop": 33,
+            "product": "Aster Watch",
+            "variant": "Aster Standard",
+            "metric": "battery_life",
+            "quantity": 28,
+            "unit": "hours",
+            "qualifier": "up to",
+            "condition": "in standard mode",
+            "assertion": null
+          },
+          "verdict": "Supported",
+          "explanation": "Source V101 says “up to 28 hours in standard mode” for Aster Standard. The complete draft assertion matches the approved metric, quantity, qualifier and condition.",
+          "suggestion": null,
+          "evidence": [
+            101
+          ]
+        }
+      ]
+    }
+  ]
+}

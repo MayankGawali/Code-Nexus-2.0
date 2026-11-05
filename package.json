@@ -10,7 +10,13 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
     "db:migrate": "tsx scripts/database.ts migrate",
-    "db:seed": "tsx scripts/database.ts seed"
+    "db:seed": "tsx scripts/database.ts seed",
+    "audit": "tsx scripts/audit.ts",
+    "lint": "eslint . --max-warnings=0",
+    "test:unit": "vitest run tests/review.test.ts tests/verification.test.ts tests/contrast.test.ts tests/release.test.ts",
+    "test:integration": "vitest run tests/workflow.integration.test.ts tests/demo.integration.test.ts",
+    "eval": "tsx scripts/evaluate.ts",
+    "demo:fresh": "tsx scripts/fresh-demo.ts"
   },
   "type": "module",
   "dependencies": {
@@ -20,12 +26,15 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "eslint": "10.14.0",
     "tsx": "4.23.15",
     "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
     "vitest": "4.1.12"
   },
   "engines": {

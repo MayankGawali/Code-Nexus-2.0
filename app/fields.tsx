@@ -12,9 +12,10 @@ export function Hidden({
   );
 }
 export function Badge({ value }: { value: string }) {
+  const good = ["Approved", "Supported"].includes(value);
   return (
-    <span className={"badge " + (value === "Approved" ? "good" : "warn")}>
-      {value}
+    <span className={"badge " + (good ? "good" : "warn")}>
+      <span aria-hidden="true">{good ? "✓" : "◷"}</span> {value}
     </span>
   );
 }
