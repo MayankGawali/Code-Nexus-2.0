@@ -1,3 +1,6 @@
+# Code-Nexus-2.0
+Hackathon winning repo
+
 # Prometheus review desk
 
 A single-reviewer workspace for the fictional Aster Watch launch. Product facts, revisions, audit findings and approvals live in local SQLite. The demo uses no accounts, API keys, hosted fonts or external services.
