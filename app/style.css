@@ -1,0 +1,300 @@
+:root {
+  color-scheme: light;
+  --ink: #162f2b;
+  --paper: #f6f5ee;
+  --line: #cbcfc2;
+  --sub: #51615a;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px max(5vw, 24px);
+  background: #173b34;
+  color: white;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 21px;
+}
+.mark {
+  background: #d6e98f;
+  color: #173b34;
+  border-radius: 5px;
+  font: bold italic 25px Georgia;
+  padding: 1px 10px;
+}
+.desk {
+  color: #cee0d5;
+}
+.local {
+  margin-left: auto;
+  font: 12px monospace;
+  color: #dcf2b2;
+}
+main,
+footer {
+  max-width: 1060px;
+  margin: auto;
+  padding: 40px 32px;
+}
+main {
+  min-height: 78vh;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover strong,
+.back:hover {
+  text-decoration: underline;
+}
+h1,
+h2,
+h3,
+blockquote {
+  font-family: Georgia, serif;
+  font-weight: 500;
+}
+h1 {
+  font-size: clamp(42px, 7vw, 78px);
+  letter-spacing: -0.055em;
+  line-height: 1.03;
+  margin: 14px 0;
+}
+h2 {
+  font-size: 30px;
+  margin: 0;
+}
+h3 {
+  font-size: 24px;
+  margin: 0;
+}
+p {
+  color: var(--sub);
+  margin: 8px 0;
+}
+.lead {
+  font-size: 18px;
+}
+.kicker,
+small,
+code,
+footer {
+  font: 12px/1.6 monospace;
+  letter-spacing: 0.06em;
+}
+.kicker {
+  color: #436853;
+  margin-top: 24px;
+  font-weight: bold;
+}
+.section {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  margin: 36px 0 16px;
+  padding-top: 18px;
+}
+.card {
+  border: 1px solid var(--line);
+  background: #fffef9;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+.campaign,
+.row,
+summary {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.campaign,
+.panel,
+details.card {
+  padding: 20px 24px;
+}
+.emblem {
+  font-size: 48px;
+  background: #e7edda;
+  border-radius: 6px;
+  padding: 8px 22px;
+}
+.campaign .kicker {
+  margin: 0;
+}
+.arrow,
+.row .badge {
+  margin-left: auto;
+}
+.row {
+  padding: 15px 20px;
+}
+.row + .row,
+article,
+details:not(.card) {
+  border-top: 1px solid var(--line);
+}
+.row p {
+  margin: 0;
+  font-size: 14px;
+}
+.badge {
+  font: 12px/1.4 monospace;
+  padding: 4px 9px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.good {
+  background: #dfecd4;
+  color: #2b511f;
+}
+.warn {
+  background: #ffebc6;
+  color: #6c4314;
+}
+.back {
+  font-size: 14px;
+}
+.preview {
+  margin-left: auto;
+  color: var(--sub);
+}
+summary {
+  cursor: pointer;
+}
+summary:after {
+  content: "+";
+  margin-left: auto;
+}
+details[open] > summary:after {
+  content: "−";
+}
+summary strong,
+summary small {
+  display: block;
+}
+summary small {
+  color: var(--sub);
+}
+details:not(.card) {
+  margin-top: 20px;
+  padding-top: 16px;
+}
+form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-top: 15px;
+}
+label {
+  display: grid;
+  gap: 5px;
+  font-size: 14px;
+}
+input,
+textarea,
+button {
+  font: inherit;
+  border-radius: 4px;
+  padding: 8px 11px;
+}
+input,
+textarea {
+  border: 1px solid #98a598;
+  background: white;
+  color: var(--ink);
+  max-width: 100%;
+}
+textarea {
+  min-width: min(480px, 65vw);
+  min-height: 90px;
+}
+button {
+  border: 0;
+  background: #204b3e;
+  color: white;
+  cursor: pointer;
+}
+button:hover {
+  background: #32684f;
+}
+article {
+  padding: 18px 0;
+}
+blockquote {
+  font-size: 25px;
+  margin: 10px 0 20px;
+  white-space: pre-wrap;
+}
+.claim {
+  border-left: 3px solid #a9ba98;
+  padding: 0 14px;
+  margin: 16px 0;
+}
+.source {
+  font-size: 14px;
+}
+.back,
+small {
+  color: #51615a;
+}
+[role="alert"] {
+  padding: 12px;
+  background: #ffe5d7;
+  color: #6a2816;
+}
+footer {
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+}
+footer span {
+  float: right;
+}
+@media (max-width: 600px) {
+  main,
+  footer {
+    padding: 24px 16px;
+  }
+  .desk,
+  .preview {
+    display: none;
+  }
+  .row,
+  .campaign {
+    gap: 10px;
+    padding: 12px;
+  }
+  .row > small {
+    display: none;
+  }
+  .local {
+    font-size: 10px;
+  }
+  .emblem {
+    padding: 10px;
+  }
+  .section {
+    flex-wrap: wrap;
+  }
+  .card {
+    overflow-wrap: anywhere;
+  }
+}
