@@ -243,13 +243,14 @@ export function recordApproval(db: DB, run: number) {
     "SELECT r.* FROM revision r JOIN audit a ON a.revision=r.id WHERE a.id=?",
     run,
   )[0];
-  if (
-    !rev ||
-    revisions(db, rev.asset)[0]?.id !== rev.id ||
-    !resolvedAudit(db, run)
-  )
+  if (!rev) throw Error("Audit revision not found.");
+  if (revisions(db, rev.asset)[0]?.id !== rev.id)
     throw Error(
-      "Approval requires the current revision, fresh evidence and resolved or explicitly overridden checks.",
+      "Revision changed. Reload the current revision before approving; the captured audit remains in history.",
+    );
+  if (!resolvedAudit(db, run))
+    throw Error(
+      "Approval requires fresh evidence and resolved or explicitly overridden checks.",
     );
   return insert(
     db,

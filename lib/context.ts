@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { z } from "zod";
 import { type DB, rows, insert } from "./db";
 import * as m from "./models";
-import { extract } from "./verification";
+import { extract, MODE } from "./verification";
 
 export const hash = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -66,14 +66,18 @@ export function currentFingerprint(db: DB, run: number) {
   );
 }
 export function freshAudit(db: DB, run: number) {
+  const a = rows(db, m.audit, "SELECT * FROM audit WHERE id=?", run)[0];
+  if (!a) throw Error("Audit not found.");
+  // Historical outcomes remain immutable; a retired verifier cannot clear
+  // a current approval after its rules have been corrected.
+  if (a.mode !== MODE) return false;
   const saved = db
     .prepare("SELECT fingerprint FROM audit_context WHERE audit=?")
     .get(run);
   if (saved) return saved.fingerprint === currentFingerprint(db, run);
   // Legacy audits have no full snapshot. Compare their immutable dependency set
   // conservatively; newly added relevant evidence requires another review.
-  const a = rows(db, m.audit, "SELECT * FROM audit WHERE id=?", run)[0];
-  if (!a) throw Error("Audit not found.");
+
   const revision = rows(
     db,
     m.revision,

@@ -9,6 +9,7 @@ Use **Node 24.14–24.x** and npm. Stop previous Prometheus servers with Ctrl+C 
 ```powershell
 npm ci
 $env:PROMETHEUS_DB = "data/demo-release.sqlite"
+$env:NEXT_TELEMETRY_DISABLED = "1"
 npm run db:migrate
 npm run db:seed
 npm run dev
@@ -23,7 +24,7 @@ npm run build
 npm start
 ```
 
-If port 3000 is occupied, append `-- --port 4000` to dev/start and use that port. On macOS/Linux use `export PROMETHEUS_DB=data/demo-release.sqlite` instead of the PowerShell assignment.
+If port 3000 is occupied, append `-- --port 4000` to dev/start and use that port. On macOS/Linux use `export PROMETHEUS_DB=data/demo-release.sqlite` and `export NEXT_TELEMETRY_DISABLED=1` instead of the PowerShell assignments.
 
 ## Reset safely: create another isolated demo
 
@@ -57,7 +58,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Playwright uses separate temporary SQLite files, production servers on ports 3198/3199/3200, and a dev-startup check on port 3000 (stop your manual server first). It exercises desktop/mobile review and poster contrast, plus the seeded judge journey and a stale approval attempt. Screenshots/traces are in `test-results`. Unit/integration tests and browser tests do not reset your workspace.
+Playwright uses separate temporary SQLite files, production servers on ports 3198/3199/3200, and a dev-startup check on port 3000 (stop your manual server first). It exercises desktop/mobile review and poster contrast, plus the seeded judge journey and a stale approval attempt. To rehearse another live value: set $env:JUDGE_BATTERY_HOURS="29" and run npm run test:e2e -- --project=judge --output test-results-alternate; unset it afterwards. Screenshots/traces are in `test-results`. Unit/integration tests and browser tests do not reset your workspace.
 
 The [synthetic evaluation](evaluation/README.md) reports correct verdicts, clean-claim false alarms, missed issues and invalid citations. It is a small development evaluation, not a claim about real-world accuracy.
 
@@ -68,7 +69,7 @@ The [synthetic evaluation](evaluation/README.md) reports correct verdicts, clean
 - Approvals are bound to an audit, revision, publication date and evidence context. Overrides require reasons and do not transfer to later revisions. Explicit overrides are human exceptions, not verifier-supported claims.
 - The poster check measures only the known **16px CTA foreground and solid background**. It is not OCR, palette validation, image analysis or a complete accessibility audit. Unsupported backgrounds require manual review.
 - Local demo identity only; no authentication, role enforcement or production multi-user guarantees. Re-audits are synchronous; comparisons use claim position; previews expire conservatively.
-- Legacy records with missing original actors/timestamps are labelled as such. Previous decisions remain historical records even when evidence is stale.
+- Legacy records with missing original actors/timestamps are labelled as such. Previous decisions remain historical records even when evidence is stale. Audits from retired verifier modes require re-audit and explicit approval under the current mode.
 - **No optional AI provider is integrated or needed.** A provider outage cannot affect this release's local mode. Never describe its results as model-generated. If a claim cannot be interpreted, keep the manual-review result or edit to approved wording and re-audit.
 - On a stale-edit/preview error, reload the current record and regenerate the preview; do not bypass the check. If a rehearsal goes off track, use the explicit new-demo command above.
 

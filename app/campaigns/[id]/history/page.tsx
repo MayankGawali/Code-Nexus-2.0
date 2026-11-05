@@ -131,7 +131,7 @@ export default async function Ledger({
                       <p>
                         {freshAudit(db, run.id)
                           ? "Evidence context current"
-                          : "Evidence context changed — historical result"}
+                          : "Verifier or evidence context changed — historical result"}
                       </p>
                       {r.findings(db, run.id).map((f) => (
                         <div className="source-box" key={f.id}>
@@ -214,7 +214,7 @@ export default async function Ledger({
                           · {decision.created} UTC ·{" "}
                           {r.resolvedAudit(db, run.id)
                             ? "Evidence current"
-                            : "Evidence changed — review required"}
+                            : "Verifier or evidence changed — review required"}
                         </p>
                       )}
                     </article>

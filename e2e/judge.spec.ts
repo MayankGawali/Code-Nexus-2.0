@@ -19,7 +19,12 @@ test("seeded judge journey uses new inputs, persists evidence, and rejects obsol
     return route.abort();
   });
   const day = "2027-02-01",
-    replacement = 17;
+    replacement = Number(process.env.JUDGE_BATTERY_HOURS ?? "17");
+  expect(Number.isSafeInteger(replacement) && replacement > 0).toBe(true);
+  info.annotations.push({
+    type: "replacement-hours",
+    description: String(replacement),
+  });
   async function audit(p = page) {
     await p.getByRole("button", { name: /^(Run audit|Re-audit)$/ }).click();
     await expect(p.locator(".engine-note")).toContainText(day);
@@ -83,7 +88,9 @@ test("seeded judge journey uses new inputs, persists evidence, and rejects obsol
   await expect(preview).toContainText("Launch email");
   await expect(preview).toContainText("Product page");
   await expect(preview).not.toContainText("Retail poster");
-  await expect(preview).toContainText("up to 17 hours in standard mode");
+  await expect(preview).toContainText(
+    "up to " + replacement + " hours in standard mode",
+  );
   await screenshot("judge-impact");
   await page.getByRole("button", { name: "Publish version" }).click();
   await overview();
@@ -105,9 +112,25 @@ test("seeded judge journey uses new inputs, persists evidence, and rejects obsol
   const evidence = page.getByRole("region", {
     name: "Selected claim evidence",
   });
-  await expect(evidence).toContainText("up to 17 hours in standard mode");
+  await expect(evidence).toContainText(
+    "up to " + replacement + " hours in standard mode",
+  );
   await expect(evidence).toContainText("Effective " + day);
-  await expect(evidence).toContainText("Contradicted");
+  const expectedOldVerdict =
+    replacement < 24
+      ? "Contradicted"
+      : replacement > 24
+        ? "Insufficient evidence"
+        : "Supported";
+  await expect(evidence.locator(".detail-heading .badge")).toContainText(
+    expectedOldVerdict,
+  );
+  console.log(
+    "Judge input " +
+      replacement +
+      " hours: old 24-hour claim => " +
+      expectedOldVerdict,
+  );
   await screenshot("judge-email-evidence");
   await edit("Up to " + replacement + " hours with GPS enabled");
   await audit();
@@ -124,7 +147,7 @@ test("seeded judge journey uses new inputs, persists evidence, and rejects obsol
   await page.reload();
   await expect(page.locator(".approval-note")).toContainText(day);
   await expect(page.getByTestId("draft-copy")).toHaveText(
-    "Up to 17 hours in standard mode",
+    "Up to " + replacement + " hours in standard mode",
   );
   await page
     .getByRole("link", {
@@ -180,7 +203,7 @@ test("seeded judge journey uses new inputs, persists evidence, and rejects obsol
   await screenshot("judge-contrast-fixed");
   // Leave a supported but unapproved revision open, then change it in another tab.
   await page.goto("/campaigns/aster/email");
-  await edit("Up to 17 hours in standard mode.");
+  await edit("Up to " + replacement + " hours in standard mode.");
   await audit();
   await expect(
     page.getByRole("button", { name: "Approve revision", exact: true }),
@@ -196,6 +219,11 @@ test("seeded judge journey uses new inputs, persists evidence, and rejects obsol
     "current revision",
   );
   await screenshot("judge-stale-approval");
+  await page.getByRole("link", { name: "Reload the current version" }).click();
+  await expect(page.getByTestId("draft-copy")).toHaveText("black and silver");
+  await expect(
+    page.getByRole("button", { name: "Approve revision", exact: true }),
+  ).toHaveCount(0);
   await newer.reload();
   await expect(newer.getByTestId("draft-copy")).toHaveText("black and silver");
   await expect(newer.locator(".toolbar-status")).toContainText("In review");

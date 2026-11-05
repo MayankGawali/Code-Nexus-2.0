@@ -69,6 +69,49 @@ describe("review workflow in a real temporary SQLite database", () => {
     r.approve(db, audit.id);
     expect(r.status(db, "email")).toBe("Approved");
   });
+  it("retains an approval from a retired verifier but requires current-mode review", () => {
+    const previous = r.revisions(db, "email")[0];
+    const revision = r.revise(
+      db,
+      "email",
+      previous.id,
+      "up to 24 hours in standard mode?",
+    );
+    const legacy = Number(
+      db
+        .prepare(
+          "INSERT INTO audit(revision,publication,mode) VALUES(?,?,'local-watch-v1')",
+        )
+        .run(revision, "2026-11-20").lastInsertRowid,
+    );
+    const finding = Number(
+      db
+        .prepare(
+          "INSERT INTO finding(audit,start,stop,quote,supported) VALUES(?,?,?,?,1)",
+        )
+        .run(legacy, 0, 31, "up to 24 hours in standard mode").lastInsertRowid,
+    );
+    db.prepare("INSERT INTO evidence VALUES(?,?)").run(finding, 1);
+    const decision = Number(
+      db
+        .prepare("INSERT INTO decision(audit,outcome) VALUES(?,'Approved')")
+        .run(legacy).lastInsertRowid,
+    );
+    expect(r.status(db, "email")).toBe("Needs review");
+    expect(r.decisions(db, "email").some((d) => d.id === decision)).toBe(true);
+    const current = r.auditRevision(db, revision, "2026-11-20");
+    expect(r.findings(db, current)[0].verdict).toBe("Needs manual review");
+    expect(() => r.approve(db, current)).toThrow();
+    const fixed = r.revise(
+      db,
+      "email",
+      revision,
+      "up to 24 hours in standard mode",
+    );
+    r.approve(db, r.auditRevision(db, fixed, "2026-11-20"));
+    expect(r.status(db, "email")).toBe("Approved");
+    expect(r.decisions(db, "email").some((d) => d.id === decision)).toBe(true);
+  });
   const counts = () =>
     [
       "version",

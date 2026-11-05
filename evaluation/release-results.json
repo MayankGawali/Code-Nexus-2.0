@@ -1,6 +1,6 @@
 {
-  "datasetSha256": "e7dcdb54f81eb1dbf45d9403b6de58448d035268018c5f771dfd2dc62c753164",
-  "label": "Synthetic human-labelled release evaluation; not real-world accuracy",
+  "datasetSha256": "1c57479d6f8ff4727b90402c719ad5ed01f6512bfd0ca8b4f9dfe401e037224d",
+  "label": "Synthetic assistant-authored release evaluation; not real-world accuracy",
   "policy": "Clean and paraphrased examples are labelled by intended semantic support, even when outside the bounded grammar. Unknown or ambiguous extraction must not pass. A non-supported result on a clean case counts as a false alarm.",
   "mode": "local-watch-v2",
   "total": 35,

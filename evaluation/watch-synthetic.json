@@ -1,5 +1,5 @@
 {
-  "label": "Synthetic human-labelled release evaluation; not real-world accuracy",
+  "label": "Synthetic assistant-authored release evaluation; not real-world accuracy",
   "policy": "Clean and paraphrased examples are labelled by intended semantic support, even when outside the bounded grammar. Unknown or ambiguous extraction must not pass. A non-supported result on a clean case counts as a false alarm.",
   "evidence": [
     {

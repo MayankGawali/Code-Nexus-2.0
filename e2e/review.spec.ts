@@ -186,10 +186,23 @@ test("review workbench supports the real workflow, exact highlights, scoped deci
     page.getByRole("heading", { name: "Revision history", exact: true }),
   ).toBeVisible();
   await page.getByRole("link", { name: "Launch email", exact: true }).click();
-  await page
-    .getByText("Compare with previous revision", { exact: true })
+  await expect(page).toHaveURL(/history\?asset=email/);
+  await expect(
+    page
+      .getByRole("navigation", { name: "Filter history" })
+      .getByRole("link", { name: "Launch email", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
+  const comparison = page
+    .locator(".ledger-revision")
     .first()
-    .click();
+    .locator("details")
+    .filter({
+      has: page.getByText("Compare with previous revision", { exact: true }),
+    })
+    .first();
+  await comparison.locator("summary").click();
+  await expect(comparison).toHaveAttribute("open", "");
+
   await expect(
     page.getByText(/Claim 1:.*Insufficient evidence.*Supported/),
   ).toBeVisible();

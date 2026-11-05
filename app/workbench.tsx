@@ -125,8 +125,9 @@ export function Workbench(p: WorkbenchProps) {
       </div>
       {!p.fresh && audit && (
         <div className="notice">
-          This audit’s evidence has changed. Re-audit before accepting a
-          correction, overriding a finding or approving.
+          This audit is out of date. Its verifier or evidence has changed.
+          Re-audit before accepting a correction, overriding a finding or
+          approving.
         </div>
       )}
       <div className="workbench">

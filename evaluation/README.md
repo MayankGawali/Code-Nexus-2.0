@@ -1,8 +1,8 @@
 # Synthetic release evaluation
 
-This is a **35-case synthetic development evaluation**, labelled before the release fixes and stored separately from the implementation's unit-test examples. It uses fictional watch facts with 28/21/12-hour specifications rather than the demo's 24/18-hour examples. Labels express intended semantic support, including clean paraphrases outside the bounded grammar.
+This is a **35-case synthetic development evaluation**, with assistant-authored expected labels specified before the release fixes and stored separately from the implementation's unit-test examples. It uses fictional watch facts with 28/21/12-hour specifications rather than the demo's 24/18-hour examples. Labels express intended semantic support, including clean paraphrases outside the bounded grammar.
 
-This set was used to diagnose release defects; it is **not** a held-out benchmark, a real marketing dataset, or evidence of real-world accuracy. No model baseline is configured or compared.
+There were no independent human raters. This set was used to diagnose release defects; it is **not** a held-out benchmark, a real marketing dataset, or evidence of real-world accuracy. No model baseline is configured or compared.
 
 Run:
 
@@ -23,3 +23,14 @@ Metrics:
 The final measured counts and examples are in release-results.json. Remaining failures include natural-language paraphrases, spelled-out numbers, unit abbreviations, decorative prefixes and decimal quantities. Manual review is safer than a false pass but still counts as a false alarm on a clean claim. A decimal overclaim may be blocked yet receive the less specific manual-review verdict instead of Contradicted.
 
 The pre-fix local run is retained in before-release-fixes.json for release traceability. It is not an AI/model baseline.
+
+
+## Measured release run
+
+- 29 of 35 exact verdicts matched the labels.
+- 5 false alarms among 15 semantically clean claims.
+- 0 missed issues among 20 issue/ambiguous claims.
+- 0 invalid citations among 20 examined links; 0 invalid quote spans; 0 Supported results without evidence.
+- Six exact-verdict failures remain: five clean paraphrases/format variants and one decimal overclaim that is blocked as manual review rather than classified Contradicted.
+
+These counts describe this assistant-authored synthetic set only. They are not population accuracy or a model benchmark.
