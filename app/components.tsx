@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 export function CampaignNav({ id, active }: { id: string; active: string }) {
   const base = "/campaigns/" + id;
   return (
@@ -7,6 +8,10 @@ export function CampaignNav({ id, active }: { id: string; active: string }) {
         ["Overview", base],
         ["Asset review", base + "/product"],
         ["Fact registry", base + "/facts"],
+        ["Brand Pack & Rules", base + "/rules"],
+        ["Channel Simulator", base + "/simulator"],
+        ["Governance Telemetry", base + "/telemetry"],
+        ["Audit Certificate", base + "/certificate"],
         ["Revision history", base + "/history"],
       ].map(([label, href]) => (
         <Link
@@ -20,6 +25,7 @@ export function CampaignNav({ id, active }: { id: string; active: string }) {
     </nav>
   );
 }
+
 export function PageTitle({
   eyebrow,
   title,

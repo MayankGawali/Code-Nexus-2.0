@@ -16,6 +16,17 @@ import {
 } from "../lib/contrast";
 import { Form, Submit } from "./form";
 import { Hidden, Badge } from "./fields";
+import { RoleSwitcher, type UserRole } from "./components/RoleSwitcher";
+import { VisualInspector } from "./components/VisualInspector";
+import { ChannelSimulator } from "./components/ChannelSimulator";
+import {
+  PreflightPlayground,
+  type PlaygroundScenario,
+} from "./components/PreflightPlayground";
+import { defaultScanner } from "../lib/lexicon";
+import { redactSecretsAndPii } from "../lib/pii-redactor";
+import { synthesizeIntentPreservingRewrite } from "../lib/intent-rewrite";
+
 type Source = FactVersion & { sourceQuote: string | null; active: boolean };
 type Claim = Finding & {
   sources: Source[];
@@ -28,6 +39,7 @@ type Visual = {
   explanation: string;
   mode: string;
 };
+
 export type WorkbenchProps = {
   campaign: string;
   asset: Asset;
@@ -42,28 +54,45 @@ export type WorkbenchProps = {
   status: string;
   nonce: string;
 };
+
 export function Workbench(p: WorkbenchProps) {
   const { asset, revision, audit } = p,
     path = "/campaigns/" + p.campaign + "/" + asset.id;
+
+  const [activeRole, setActiveRole] = useState<UserRole>("reviewer");
+  const [showPlayground, setShowPlayground] = useState(false);
+
   const [selection, setSelection] = useState<number | null>(
-      p.findings[0]?.id ?? null,
-    ),
-    [tab, setTab] = useState<"facts" | "visual">("facts");
+    p.findings[0]?.id ?? null,
+  );
+  const [tab, setTab] = useState<
+    "facts" | "visual" | "lexicon" | "security" | "simulator"
+  >("facts");
+
   const [foreground, setForeground] = useState(
-      p.style?.foreground ?? "#ffffff",
-    ),
-    [background, setBackground] = useState(p.style?.background ?? "#173b34"),
-    [kind, setKind] = useState<"solid" | "unsupported">(
-      p.style?.kind ?? "solid",
-    );
+    p.style?.foreground ?? "#ffffff",
+  );
+  const [background, setBackground] = useState(p.style?.background ?? "#173b34");
+  const [kind, setKind] = useState<"solid" | "unsupported">(
+    p.style?.kind ?? "solid",
+  );
+
   const selected = p.findings.find((f) => f.id === selection),
     mark = useRef<HTMLElement>(null),
-    cta = useRef<HTMLSpanElement>(null);
+    cta = useRef<HTMLSpanElement>(null),
+    draftTextarea = useRef<HTMLTextAreaElement>(null);
+
   const exact =
     selected &&
     revision.body.slice(selected.start, selected.stop) === selected.quote;
+
   const previewStyle: PosterStyle = { foreground, background, kind },
     contrast = checkContrast(previewStyle);
+
+  // Live scanner executions
+  const lexiconIssues = defaultScanner.scan(revision.body);
+  const piiResult = redactSecretsAndPii(revision.body);
+
   function highlight(id: number) {
     setTab("facts");
     setSelection(id);
@@ -71,24 +100,68 @@ export function Workbench(p: WorkbenchProps) {
       mark.current?.scrollIntoView({ block: "nearest", behavior: "instant" }),
     );
   }
+
   function inspectVisual() {
     setTab("visual");
     requestAnimationFrame(() =>
       cta.current?.scrollIntoView({ block: "nearest", behavior: "instant" }),
     );
   }
+
+  function handleSelectPreset(scenario: PlaygroundScenario) {
+    setForeground(scenario.fgColor);
+    setBackground(scenario.bgColor);
+    if (draftTextarea.current) {
+      draftTextarea.current.value = scenario.draftText;
+    }
+  }
+
+  function handleApplyLexiconFix(target: string, replacement: string) {
+    const updated = revision.body.replace(
+      new RegExp(`\\b${target}\\b`, "gi"),
+      replacement,
+    );
+    if (draftTextarea.current) {
+      draftTextarea.current.value = updated;
+    }
+    // Open editor details
+    const details = document.querySelector("details.editor") as HTMLDetailsElement | null;
+    if (details) details.open = true;
+  }
+
   const fields = {
     id: asset.id,
     expected: revision.id,
     request: p.nonce + ":edit",
   };
+
   return (
     <>
+      {/* Role Switcher Persona Bar */}
+      <RoleSwitcher activeRole={activeRole} onRoleChange={setActiveRole} />
+
+      {/* Preset Playground Toggle Banner */}
+      <div className="playground-toggle-bar">
+        <button
+          type="button"
+          className="toggle-playground-btn"
+          onClick={() => setShowPlayground(!showPlayground)}
+        >
+          <span>⚡ {showPlayground ? "Hide" : "Open"} Judge Pre-Flight Test Presets (6-Pillar Showcase)</span>
+          <span className="preset-count-badge">6 Ready Scenarios</span>
+        </button>
+      </div>
+
+      {showPlayground && (
+        <PreflightPlayground onSelectScenario={handleSelectPreset} />
+      )}
+
       <div className="review-toolbar">
         <div className="toolbar-status">
           <Badge value={p.status} />
           <small>Current revision R{revision.id}</small>
         </div>
+
         <Form path={path} className="date-form">
           <Hidden
             values={{
@@ -106,6 +179,7 @@ export function Workbench(p: WorkbenchProps) {
             {audit ? "Re-audit" : "Run audit"}
           </Submit>
         </Form>
+
         <div className="approval-action">
           {p.status === "Approved" ? (
             <span className="approval-note">✓ Approved for {p.day}</span>
@@ -123,6 +197,7 @@ export function Workbench(p: WorkbenchProps) {
           )}
         </div>
       </div>
+
       {!p.fresh && audit && (
         <div className="notice">
           This audit is out of date. Its verifier or evidence has changed.
@@ -130,6 +205,7 @@ export function Workbench(p: WorkbenchProps) {
           approving.
         </div>
       )}
+
       <div className="workbench">
         <section className="draft-pane" aria-label="Asset draft">
           <div className="pane-heading">
@@ -138,6 +214,7 @@ export function Workbench(p: WorkbenchProps) {
               {asset.channel} · R{revision.id}
             </span>
           </div>
+
           <div
             className={
               "document " + (asset.channel === "Print" ? "poster-document" : "")
@@ -224,6 +301,7 @@ export function Workbench(p: WorkbenchProps) {
               )}
             </div>
           </div>
+
           <details className="editor card">
             <summary>
               <strong>Edit draft</strong>
@@ -234,6 +312,7 @@ export function Workbench(p: WorkbenchProps) {
               <label>
                 Revised copy
                 <textarea
+                  ref={draftTextarea}
                   name="body"
                   defaultValue={revision.body}
                   required
@@ -248,6 +327,7 @@ export function Workbench(p: WorkbenchProps) {
               <Submit>Save revision</Submit>
             </Form>
           </details>
+
           <Link
             className="text-link"
             href={"/campaigns/" + p.campaign + "/history?asset=" + asset.id}
@@ -255,6 +335,7 @@ export function Workbench(p: WorkbenchProps) {
             View all revisions & original evidence →
           </Link>
         </section>
+
         <aside
           className="evidence-pane"
           aria-label="Evidence and review actions"
@@ -265,6 +346,7 @@ export function Workbench(p: WorkbenchProps) {
               {audit ? "AUDIT #" + audit.id : "NOT AUDITED"}
             </span>
           </div>
+
           <div
             className="check-tabs"
             role="group"
@@ -277,6 +359,15 @@ export function Workbench(p: WorkbenchProps) {
             >
               Factual claims <span>{p.findings.length}</span>
             </button>
+
+            <button
+              type="button"
+              aria-pressed={tab === "lexicon"}
+              onClick={() => setTab("lexicon")}
+            >
+              Lexicon & Tone <span>{lexiconIssues.length}</span>
+            </button>
+
             {asset.channel === "Print" && (
               <button
                 type="button"
@@ -286,8 +377,26 @@ export function Workbench(p: WorkbenchProps) {
                 Visual check <span>{p.visual.length}</span>
               </button>
             )}
+
+            <button
+              type="button"
+              aria-pressed={tab === "security"}
+              onClick={() => setTab("security")}
+            >
+              Security / PII <span>{piiResult.redactions.length}</span>
+            </button>
+
+            <button
+              type="button"
+              aria-pressed={tab === "simulator"}
+              onClick={() => setTab("simulator")}
+            >
+              Simulator
+            </button>
           </div>
-          {tab === "facts" ? (
+
+          {/* TAB 1: Factual claims */}
+          {tab === "facts" && (
             <>
               {!audit ? (
                 <div className="empty card">
@@ -339,6 +448,7 @@ export function Workbench(p: WorkbenchProps) {
                       </button>
                     ))}
                   </div>
+
                   {selected && (
                     <section
                       className="evidence-detail card"
@@ -489,7 +599,70 @@ export function Workbench(p: WorkbenchProps) {
                 </>
               )}
             </>
-          ) : (
+          )}
+
+          {/* TAB 2: Lexicon & Tone */}
+          {tab === "lexicon" && (
+            <div className="lexicon-findings-pane">
+              <span className="mini-label">PILLAR 2 & 3: AHO-CORASICK LEXICON SCANNER</span>
+              <h3>Terminology & Brand Voice Checks</h3>
+
+              {lexiconIssues.length === 0 ? (
+                <div className="empty card">
+                  <h4>✓ Brand Lexicon Clear</h4>
+                  <p className="quiet">
+                    No forbidden buzzwords, unverified superlatives, or trademark capitalization errors found in this revision.
+                  </p>
+                </div>
+              ) : (
+                <div className="lexicon-issue-list">
+                  {lexiconIssues.map((m, idx) => {
+                    const rewrite = synthesizeIntentPreservingRewrite(
+                      revision.body,
+                      [{ target: m.matchedText, replacement: m.replacement, ruleId: m.ruleId }],
+                    );
+                    return (
+                      <div key={idx} className="lexicon-match-card card">
+                        <div className="match-top-row">
+                          <span className={`sev-badge sev-${m.severity}`}>
+                            {m.severity.toUpperCase()}
+                          </span>
+                          <span className="category-chip">
+                            {m.category.replace("_", " ")}
+                          </span>
+                          <code>{m.ruleId}</code>
+                        </div>
+                        <h4 className="flagged-term-title">
+                          Flagged: <mark>“{m.matchedText}”</mark>
+                        </h4>
+                        <p>{m.explanation}</p>
+                        <div className="quick-remediation-box">
+                          <span>
+                            Compliant replacement: <strong>“{m.replacement}”</strong>
+                          </span>
+                          <small>
+                            ({(rewrite.semanticSimilarity * 100).toFixed(0)}% semantic intent preserved)
+                          </small>
+                          <button
+                            type="button"
+                            className="secondary action-btn-compact"
+                            onClick={() =>
+                              handleApplyLexiconFix(m.matchedText, m.replacement)
+                            }
+                          >
+                            ⚡ Insert Fix into Draft Editor
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 3: Visual check & Color Science */}
+          {tab === "visual" && (
             <section
               className="evidence-detail card"
               aria-label="Poster contrast check"
@@ -519,7 +692,19 @@ export function Workbench(p: WorkbenchProps) {
                 Highlight CTA element
               </button>
               <hr />
-              <h3>Try a colour correction</h3>
+
+              {/* Integrated Interactive Visual Inspector */}
+              <VisualInspector
+                initialForeground={foreground}
+                initialBackground={background}
+                onApplyColors={(f, b) => {
+                  setForeground(f);
+                  setBackground(b);
+                }}
+              />
+
+              <hr />
+              <h3>Save Appearance Revision</h3>
               <p className="quiet">
                 The live preview uses actual colour math. Save to create an
                 immutable revision and measured audit.
@@ -612,6 +797,51 @@ export function Workbench(p: WorkbenchProps) {
                 not measure the entire poster.
               </p>
             </section>
+          )}
+
+          {/* TAB 4: Security & PII */}
+          {tab === "security" && (
+            <div className="security-findings-pane card">
+              <span className="mini-label">RESPONSIBLE AI: ZERO-PII & SECRET PROTECTION</span>
+              <h3>Confidential Data & Credential Redaction</h3>
+              {!piiResult.hasRedactions ? (
+                <div className="empty">
+                  <h4>✓ Zero Sensitive Credentials Detected</h4>
+                  <p className="quiet">
+                    No API keys, access tokens, personal phone numbers, or embargoed project codenames found in this text. Safe for external model dispatch or public release.
+                  </p>
+                </div>
+              ) : (
+                <div className="pii-alert-box">
+                  <h4 className="alert-title">⚠️ Sensitive Data Detected in Draft</h4>
+                  <p>
+                    The following secrets were masked by the deterministic pre-inference sanitizer:
+                  </p>
+                  <ul>
+                    {piiResult.redactions.map((r, i) => (
+                      <li key={i}>
+                        <strong>{r.type.replace("_", " ").toUpperCase()}:</strong>{" "}
+                        <code>{r.masked}</code> (raw token masked)
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="sanitized-preview">
+                    <span className="mini-label">PRE-INFERENCE SANITIZED OUTPUT:</span>
+                    <blockquote>{piiResult.sanitized}</blockquote>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 5: Simulator */}
+          {tab === "simulator" && (
+            <div className="workbench-simulator-pane">
+              <ChannelSimulator
+                text={revision.body}
+                posterColors={{ foreground, background }}
+              />
+            </div>
           )}
         </aside>
       </div>
