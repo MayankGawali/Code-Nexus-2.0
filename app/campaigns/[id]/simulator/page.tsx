@@ -47,11 +47,16 @@ export default async function SimulatorPage({
         </div>
       </PageTitle>
 
-      <CampaignNav id={id} active="Channel Simulator" />
+      <CampaignNav
+        id={id}
+        active="Channel Simulator"
+        firstAsset={posterAsset?.id ?? emailAsset?.id ?? assets[0]?.id}
+      />
 
       <div className="simulator-page-container">
         <ChannelSimulator
           text={defaultText}
+          brandName={c.name}
           posterColors={{
             foreground: style?.foreground ?? "#ffffff",
             background: style?.background ?? "#173b34",

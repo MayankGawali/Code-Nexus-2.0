@@ -37,7 +37,11 @@ export default async function BrandRulesPage({
         </div>
       </PageTitle>
 
-      <CampaignNav id={id} active="Brand Pack & Rules" />
+      <CampaignNav
+        id={id}
+        active="Brand Pack & Rules"
+        firstAsset={r.assets(db, id)[0]?.id}
+      />
 
       <div className="rules-page-layout">
         {/* Visual Palette Section */}

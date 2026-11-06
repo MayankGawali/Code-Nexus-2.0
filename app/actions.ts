@@ -16,12 +16,14 @@ import {
   overrideFinding,
   revise,
   approve,
+  addCampaign,
+  addAsset,
 } from "../lib/review";
 async function perform(path: string, data: FormData) {
   const get = (k: string) => z.string().parse(data.get(k));
   const number = (k: string) =>
     z.coerce.number().int().positive().parse(get(k));
-  if (path !== "/" && !/^\/campaigns\/[\w-]+(?:\/[\w-]+)?$/.test(path))
+  if (path !== "/" && !/^\/campaigns\/[\w-]+(?:\/[\w-]+)*$/.test(path))
     throw Error("Invalid workspace path.");
   let preview = "";
   const request = () => get("request");
@@ -30,6 +32,20 @@ async function perform(path: string, data: FormData) {
     case "start":
       seed(db);
       return "/campaigns/aster";
+    case "create_campaign":
+      addCampaign(db, get("id"), get("name"), get("publication"));
+      return "/campaigns/" + get("id");
+    case "create_asset":
+      addAsset(
+        db,
+        get("id"),
+        get("campaign"),
+        get("name"),
+        get("channel"),
+        get("variant"),
+        get("body"),
+      );
+      return "/campaigns/" + get("campaign") + "/" + get("id");
     case "contrast":
       revisePoster(
         db,

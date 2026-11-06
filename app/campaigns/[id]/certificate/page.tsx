@@ -52,7 +52,11 @@ export default async function CertificatePage({
         </div>
       </PageTitle>
 
-      <CampaignNav id={id} active="Audit Certificate" />
+      <CampaignNav
+        id={id}
+        active="Audit Certificate"
+        firstAsset={primaryAsset?.id}
+      />
 
       {/* Official Certificate Parchment / Frame */}
       <div className="certificate-document-frame">

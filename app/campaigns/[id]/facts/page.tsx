@@ -32,7 +32,11 @@ export default async function Registry({
         title="Fact registry"
         description="Approved wording, with a version and a reason behind every change."
       />
-      <CampaignNav id={id} active="Fact registry" />
+      <CampaignNav
+        id={id}
+        active="Fact registry"
+        firstAsset={r.assets(db, id)[0]?.id}
+      />
       <div className="registry-layout">
         <section>
           {preview && (
@@ -207,7 +211,7 @@ export default async function Registry({
               </details>
             );
           })}
-          <details className="fact-record card">
+          <details className="fact-record card" open={list.length === 0}>
             <summary>
               <strong>+ Add approved fact</strong>
             </summary>
@@ -220,7 +224,7 @@ export default async function Registry({
                     name="variant"
                     required
                     maxLength={80}
-                    defaultValue="Aster Standard"
+                    defaultValue={c.name}
                   />
                 </label>
                 <label>

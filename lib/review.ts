@@ -76,6 +76,86 @@ export function addVersion(
     end,
   );
 }
+export function addCampaign(
+  db: DB,
+  id: string,
+  name: string,
+  publication: string,
+) {
+  const slug = z
+    .string()
+    .trim()
+    .regex(/^[\w-]+$/, "Use alphanumeric characters or hyphens.")
+    .parse(id);
+  const title = z.string().trim().min(1).max(120).parse(name);
+  const dateStr = m.date.parse(publication);
+  return transaction(db, () => {
+    insert(db, "INSERT INTO campaign VALUES(?,?,?)", slug, title, dateStr);
+    return slug;
+  });
+}
+
+export function addAsset(
+  db: DB,
+  id: string,
+  campaign: string,
+  name: string,
+  channel: string,
+  variant: string,
+  body: string,
+  style?: PosterStyle,
+) {
+  const slug = z
+    .string()
+    .trim()
+    .regex(/^[\w-]+$/, "Use alphanumeric characters or hyphens.")
+    .parse(id);
+  const title = z.string().trim().min(1).max(120).parse(name);
+  const cChannel = z
+    .enum(["Web", "Email", "Print", "Social", "Document"])
+    .catch("Web")
+    .parse(channel);
+  const cVariant = z.string().trim().min(1).max(120).parse(variant);
+  const initialCopy = m.copy.parse(body);
+
+  return transaction(db, () => {
+    insert(
+      db,
+      "INSERT INTO asset VALUES(?,?,?,?,?)",
+      slug,
+      campaign,
+      title,
+      cVariant,
+      cChannel,
+    );
+    const revId = insert(
+      db,
+      "INSERT INTO revision(asset,body) VALUES(?,?)",
+      slug,
+      initialCopy,
+    );
+    if (cChannel === "Print") {
+      insert(
+        db,
+        "INSERT INTO poster_style VALUES(?,?,?,?)",
+        revId,
+        style?.foreground ?? "#ffffff",
+        style?.background ?? "#173b34",
+        style?.kind ?? "solid",
+      );
+    }
+    const c = rows(
+      db,
+      m.campaign,
+      "SELECT * FROM campaign WHERE id=?",
+      campaign,
+    )[0];
+    const pubDate = c ? c.publication : new Date().toISOString().slice(0, 10);
+    recordAudit(db, revId, pubDate);
+    return slug;
+  });
+}
+
 export function addFact(
   db: DB,
   variant: string,

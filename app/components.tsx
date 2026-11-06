@@ -1,12 +1,26 @@
 import Link from "next/link";
 
-export function CampaignNav({ id, active }: { id: string; active: string }) {
+export function CampaignNav({
+  id,
+  active,
+  firstAsset,
+}: {
+  id: string;
+  active: string;
+  firstAsset?: string;
+}) {
   const base = "/campaigns/" + id;
+  const assetTarget = firstAsset
+    ? base + "/" + firstAsset
+    : id === "aster"
+      ? base + "/product"
+      : base;
+
   return (
     <nav className="tabs" aria-label="Campaign navigation">
       {[
         ["Overview", base],
-        ["Asset review", base + "/product"],
+        ["Asset review", assetTarget],
         ["Fact registry", base + "/facts"],
         ["Brand Pack & Rules", base + "/rules"],
         ["Channel Simulator", base + "/simulator"],

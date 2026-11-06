@@ -91,10 +91,10 @@ export function PreflightPlayground({
   return (
     <div className="playground-panel">
       <div className="playground-header">
-        <span className="mini-label">HACKATHON JUDGE PRE-FLIGHT BENCHMARK</span>
+        <span className="mini-label">ENTERPRISE PRE-FLIGHT GOVERNANCE BENCHMARK</span>
         <h4>Quick Test Presets (Instant 6-Pillar Violation Showcase)</h4>
         <p className="playground-sub">
-          Click any preset to instantly populate the workbench with real-world compliance edge cases.
+          Click any preset to instantly test real-world enterprise compliance edge cases across all six governance dimensions.
         </p>
       </div>
 

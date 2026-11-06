@@ -147,7 +147,7 @@ export function Workbench(p: WorkbenchProps) {
           className="toggle-playground-btn"
           onClick={() => setShowPlayground(!showPlayground)}
         >
-          <span>⚡ {showPlayground ? "Hide" : "Open"} Judge Pre-Flight Test Presets (6-Pillar Showcase)</span>
+          <span>⚡ {showPlayground ? "Hide" : "Open"} Enterprise Test Presets (6 Governance Pillars)</span>
           <span className="preset-count-badge">6 Ready Scenarios</span>
         </button>
       </div>
@@ -839,6 +839,7 @@ export function Workbench(p: WorkbenchProps) {
             <div className="workbench-simulator-pane">
               <ChannelSimulator
                 text={revision.body}
+                brandName={asset.variant}
                 posterColors={{ foreground, background }}
               />
             </div>

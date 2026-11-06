@@ -143,7 +143,63 @@ export const INKLOOM_AI_BRAND_PACK: BrandPack = {
   },
 };
 
-export const BRAND_PACKS = [ASTER_WATCH_BRAND_PACK, INKLOOM_AI_BRAND_PACK];
+export const ACME_CLOUD_BRAND_PACK: BrandPack = {
+  id: "acme-cloud-v1",
+  name: "Acme Cloud Infrastructure & Security Identity Pack",
+  version: "3.1.0",
+  effectiveDate: "2026-02-01",
+  description: "Enterprise brand identity and strict technical disclosure guidelines for Acme Cloud infrastructure and managed services.",
+  palette: [
+    {
+      name: "Acme Navy",
+      hex: "#0A192F",
+      usage: "primary",
+      lab: hexToLab("#0A192F"),
+    },
+    {
+      name: "Electric Cyan",
+      hex: "#00B4D8",
+      usage: "accent",
+      lab: hexToLab("#00B4D8"),
+    },
+    {
+      name: "Cloud Slate",
+      hex: "#F1F5F9",
+      usage: "background",
+      lab: hexToLab("#F1F5F9"),
+    },
+    {
+      name: "Charcoal Steel",
+      hex: "#334155",
+      usage: "neutral",
+      lab: hexToLab("#334155"),
+    },
+  ],
+  logo: {
+    expectedAspectRatio: 3.2,
+    tolerancePercent: 2.0,
+    approvedPHash: "d41a89c20f5e713b",
+  },
+  voice: {
+    targetTone: "authoritative_technical",
+    maxSuperlativesPer100Words: 0,
+    targetFleschReadingEaseMin: 40,
+    targetGradeLevelMax: 14,
+  },
+  lexiconRules: DEFAULT_BRAND_LEXICON_RULES,
+  wcag: {
+    contrastNormal: 4.5,
+    contrastLarge: 3.0,
+    requireAltText: true,
+    enforceHeadingHierarchy: true,
+  },
+};
+
+export const BRAND_PACKS = [
+  ASTER_WATCH_BRAND_PACK,
+  INKLOOM_AI_BRAND_PACK,
+  ACME_CLOUD_BRAND_PACK,
+];
 
 export function getBrandPack(id = "aster-watch-v2"): BrandPack {
   return BRAND_PACKS.find((b) => b.id === id) ?? ASTER_WATCH_BRAND_PACK;

@@ -35,7 +35,11 @@ export default async function Ledger({
         title="Revision history"
         description="What changed, who reviewed it, and exactly which evidence they used."
       />
-      <CampaignNav id={id} active="Revision history" />
+      <CampaignNav
+        id={id}
+        active="Revision history"
+        firstAsset={r.assets(db, id)[0]?.id}
+      />
       <div className="identity-note">
         DR · Review identity: <strong>Local demo reviewer</strong> · This is an
         explicitly labelled local demo identity.

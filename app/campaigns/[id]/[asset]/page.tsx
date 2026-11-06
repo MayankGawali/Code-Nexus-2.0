@@ -53,7 +53,7 @@ export default async function AssetReview({
           " · Inspect the draft, follow its evidence, make the call."
         }
       />
-      <CampaignNav id={id} active="Asset review" />
+      <CampaignNav id={id} active="Asset review" firstAsset={asset} />
       <Workbench
         key={revision.id + "-" + (audit?.id ?? "none")}
         campaign={id}

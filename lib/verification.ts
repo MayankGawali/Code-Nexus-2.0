@@ -38,7 +38,7 @@ export type Result = {
 export const context = (variant: string) => ({
   product: ["Aster Standard", "Aster Trail"].includes(variant)
     ? "Aster Watch"
-    : null,
+    : (variant.trim() || "General Product"),
   variant,
 });
 
@@ -133,6 +133,64 @@ export function verify(
     suggestion,
     evidence: sources.map((s) => s.id),
   });
+  if (c.product !== "Aster Watch") {
+    if (c.quote.includes("?")) {
+      return result(
+        "Needs manual review",
+        "Questions cannot serve as supported factual claims.",
+      );
+    }
+    const scopedCustom = evidence.filter(
+      (e) =>
+        e.variant === c.variant &&
+        e.start <= publication &&
+        (!e.until || publication < e.until),
+    );
+    if (scopedCustom.length === 0) {
+      return result(
+        "Insufficient evidence",
+        `No applicable evidence for ${c.variant} on ${publication}.`,
+      );
+    }
+    const norm = (s: string) =>
+      s
+        .toLowerCase()
+        .replace(/^[^\w]+|[^\w]+$/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    const matches = scopedCustom.filter(
+      (e) => norm(e.wording) === norm(c.quote),
+    );
+    if (matches.length === 1) {
+      return result(
+        "Supported",
+        `Source V${matches[0].id} supports “${matches[0].wording}” for ${c.variant}.`,
+        matches,
+      );
+    }
+    // Check if draft numbers conflict with approved source specifications
+    const draftNums = c.quote.match(/\d+(?:\.\d+)?/g);
+    if (draftNums && scopedCustom.length > 0) {
+      for (const src of scopedCustom) {
+        const srcNums = src.wording.match(/\d+(?:\.\d+)?/g);
+        if (srcNums && draftNums.some((d) => !srcNums.includes(d))) {
+          return result(
+            "Contradicted",
+            `Source V${src.id} specifies “${src.wording}”. Draft quantitative values do not match approved specifications.`,
+            [src],
+            src.wording,
+          );
+        }
+      }
+    }
+    return result(
+      "Needs manual review",
+      "Multiple sources or non-matching wording requires manual review.",
+      scopedCustom,
+      scopedCustom[0]?.wording ?? null,
+    );
+  }
+
   if (!c.product || c.metric === "unknown")
     return result(
       "Needs manual review",

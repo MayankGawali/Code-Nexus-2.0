@@ -39,7 +39,11 @@ export default async function TelemetryPage({
         </div>
       </PageTitle>
 
-      <CampaignNav id={id} active="Governance Telemetry" />
+      <CampaignNav
+        id={id}
+        active="Governance Telemetry"
+        firstAsset={r.assets(db, id)[0]?.id}
+      />
 
       {/* High-level KPI Row */}
       <div className="telemetry-kpis-grid">
